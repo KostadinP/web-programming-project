@@ -1,0 +1,75 @@
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel top-buffer">
+			<h2>Grade</h2>
+			<div>
+				<combo combo-type="professors" combo-required="true"
+						combo-label="Professor"
+						combo-property="'ime'"
+						multiple="false"
+						combo-model="entity.professor"
+						combo-name="professor">
+				</combo>
+			</div>
+			<div>
+				<combo combo-type="students" combo-required="true"
+						combo-label="Student"
+						combo-property="studentName"
+						multiple="false"
+						combo-model="entity.student"
+						combo-name="student">
+				</combo>
+			</div>
+
+			<div>
+				<combo combo-type="courses" combo-required="true"
+						combo-label="Course" 
+						multiple="false"
+						combo-property="'ime'"
+						combo-model="entity.course"
+						combo-name="course">
+				</combo>
+			</div>
+			
+			<div>
+				<label>Grade</label>
+				<input type="number" 
+						class="form-control" 
+						ng-model="entity.vrednost" />
+			</div>
+			
+			<button ng-click="save()">
+				<i class="glyphicon glyphicon-save"></i> Save
+			</button>
+		</div>
+	</div>
+
+
+	<div class="col-md-6">
+		<h2>All Grades</h2>
+		<table class="top-buffer">
+			<tr>
+				<th>Professor&nbsp;</th>
+				<th>Student&nbsp;</th>
+				<th>Course&nbsp;</th>
+				<th>Grade&nbsp;</th>
+				<th>Action</th>
+			</tr>
+			<!-- one tr element for each grade -->
+			<tr ng-repeat="e in entities">
+				<td>{{ e.professor.ime }}</td>
+				<td>{{ e.student.ime }} {{ e.student.prezime }}</td>
+				<td>{{ e.course.ime }} </td>
+				<td>{{ e.vrednost }}</td>
+				<td>
+					<button ng-click="edit(e.id)" class="btn btn-danger btn-xs">
+						<i class="glyphicon glyphicon-plus"></i> Edit
+					</button>
+					<button ng-click="remove(e.id)" class="btn btn-danger btn-xs">
+						<i class="glyphicon glyphicon-minus"></i> Remove
+					</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
