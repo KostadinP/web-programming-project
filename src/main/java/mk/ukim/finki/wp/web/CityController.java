@@ -26,6 +26,9 @@ public class CityController {
 	public CityService getService() {
 		return service;
 	}
+	
+	
+	
 
 	@RequestMapping(value = "add", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
