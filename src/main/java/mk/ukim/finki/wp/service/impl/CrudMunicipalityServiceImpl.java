@@ -17,7 +17,7 @@ public class CrudMunicipalityServiceImpl extends
 	
 	@Override
 	protected MunicipalityRepository getRepository() {
-		return null;
+		return repository;
 	}
 
 }
