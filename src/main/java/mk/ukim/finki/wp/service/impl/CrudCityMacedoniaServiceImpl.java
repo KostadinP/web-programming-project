@@ -20,4 +20,10 @@ public class CrudCityMacedoniaServiceImpl extends
 		return repository;
 	}
 
+	@Override
+	public CityMacedonia findByLatitudeAndLongitude(float latitude,
+			float longitude) {
+		return repository.findByLatitudeAndLongitude(latitude, longitude);
+	}
+
 }

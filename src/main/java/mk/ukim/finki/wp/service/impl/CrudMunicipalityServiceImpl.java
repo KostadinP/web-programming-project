@@ -20,4 +20,11 @@ public class CrudMunicipalityServiceImpl extends
 		return repository;
 	}
 
+	@Override
+	public Municipality findByLatitudeAndLongitude(float latitude,
+			float longitude) {
+		return repository.findByLatitudeAndLongitude(latitude, longitude);
+	}
+	
+	
 }
