@@ -20,4 +20,9 @@ public class CrudTaxiServiceImpl extends
 		return repository;
 	}
 
+	@Override
+	public Taxi findByTaxiName(String taxiName) {
+		return repository.findByTaxiName(taxiName);
+	}
+
 }

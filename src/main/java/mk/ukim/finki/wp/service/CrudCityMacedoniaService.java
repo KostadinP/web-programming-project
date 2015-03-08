@@ -5,5 +5,5 @@ import mk.ukim.finki.wp.model.CityMacedonia;
 public interface CrudCityMacedoniaService extends
 		BaseEntityCrudService<CityMacedonia> {
 
-	CityMacedonia findByLatitudeAndLongitude(float latitude, float longitude);
+	CityMacedonia findByLatitudeAndLongitude(double latitude, double longitude);
 }

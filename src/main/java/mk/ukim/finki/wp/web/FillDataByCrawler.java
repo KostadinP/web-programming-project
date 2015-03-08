@@ -7,6 +7,7 @@ import java.util.List;
 import mk.ukim.finki.wp.model.Taxi;
 import mk.ukim.finki.wp.repository.CityMacedoniaRepository;
 import mk.ukim.finki.wp.repository.TaxiRepository;
+import mk.ukim.finki.wp.service.CrudTaxiService;
 import mk.ukim.finki.wp.service.taxiCrawler.TaxiCrawlerI;
 import mk.ukim.finki.wp.service.taxiCrawler.TaxiCrawlerService;
 
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class FillDataByCrawler {
 	
 	@Autowired
-	TaxiRepository taxiRepo;
+	CrudTaxiService taxiService;
 	@Autowired
 	TaxiCrawlerI taxiCrawler;
 	
@@ -33,8 +34,8 @@ public class FillDataByCrawler {
 		ArrayList<Taxi> taxiList = taxiCrawler.getAll();
 		ArrayList<Taxi> newTaxies = new ArrayList<Taxi>();
 		for (Taxi taxi : taxiList) {
-			if(taxiRepo.findByTaxiName(taxi.getTaxiName())==null){
-				taxiRepo.save(taxi);
+			if(taxiService.findByTaxiName(taxi.getTaxiName())==null){
+				taxiService.save(taxi);
 				newTaxies.add(taxi);
 			}
 		}

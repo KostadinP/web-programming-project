@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TaxiRepository extends JpaRepository<Taxi, Long>{
 	
-	public Taxi findByTaxiName (String taxiName);
+	 Taxi findByTaxiName (String taxiName);
 }

@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 
 import mk.ukim.finki.wp.model.CityMacedonia;
 import mk.ukim.finki.wp.model.Taxi;
-import mk.ukim.finki.wp.repository.CityMacedoniaRepository;
+import mk.ukim.finki.wp.service.CrudCityMacedoniaService;
 import mk.ukim.finki.wp.service.location.LocationReaderService;
 
 import org.json.JSONException;
@@ -15,8 +15,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,7 +24,7 @@ public class TaxiInfoCrawler implements TaxiInfoCrawlerI{
 	private String url = "http://zk.mk/";
 
 	@Autowired
-	private CityMacedoniaRepository cityRepo;
+	private CrudCityMacedoniaService cityService;
 
 	private void init(String path) {
 		try {
@@ -54,14 +52,14 @@ public class TaxiInfoCrawler implements TaxiInfoCrawlerI{
 
 		CityMacedonia city = LocationReaderService.getCityLocation(location);
 		
-		CityMacedonia result  = cityRepo.findByLatitudeAndLongitude(city.getLatitude(), city.getLongitude());
+		CityMacedonia result  = cityService.findByLatitudeAndLongitude(city.getLatitude(), city.getLongitude());
 
 		if (result != null) {
 			
 			taxi.setTaxiLocation(result);
 		} else {
 			System.out.println(city.getLatitude() + " "+ city.getLongitude());
-			cityRepo.saveAndFlush(city);
+			cityService.saveAndFlush(city);
 			taxi.setTaxiLocation(city);
 		}
 

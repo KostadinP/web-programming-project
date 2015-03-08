@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CityMacedoniaRepository extends
 		JpaRepository<CityMacedonia, Long> {
 
-	public CityMacedonia findByLatitudeAndLongitude(double latitude, double longitude);
+	 CityMacedonia findByLatitudeAndLongitude(double latitude, double longitude);
 }
