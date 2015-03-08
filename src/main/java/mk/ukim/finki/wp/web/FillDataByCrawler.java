@@ -7,6 +7,7 @@ import java.util.List;
 import mk.ukim.finki.wp.model.Taxi;
 import mk.ukim.finki.wp.repository.CityMacedoniaRepository;
 import mk.ukim.finki.wp.repository.TaxiRepository;
+import mk.ukim.finki.wp.service.taxiCrawler.TaxiCrawlerI;
 import mk.ukim.finki.wp.service.taxiCrawler.TaxiCrawlerService;
 
 import org.json.JSONException;
@@ -22,13 +23,21 @@ public class FillDataByCrawler {
 	
 	@Autowired
 	TaxiRepository taxiRepo;
+	@Autowired
+	TaxiCrawlerI taxiCrawler;
 	
 	@RequestMapping(value = "taxi", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public List<Taxi> fillTaxiData () throws IOException, JSONException {
 		
-		ArrayList<Taxi> taxiList = TaxiCrawlerService.getAll();
-		taxiRepo.save(taxiList);
-		return taxiRepo.findAll();
+		ArrayList<Taxi> taxiList = taxiCrawler.getAll();
+		ArrayList<Taxi> newTaxies = new ArrayList<Taxi>();
+		for (Taxi taxi : taxiList) {
+			if(taxiRepo.findByTaxiName(taxi.getTaxiName())==null){
+				taxiRepo.save(taxi);
+				newTaxies.add(taxi);
+			}
+		}
+		return newTaxies;
 	}
 }

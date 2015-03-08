@@ -19,14 +19,14 @@ public class LocationReaderService {
 	public static CityMacedonia getCityLocation(String cityName) throws IOException,
 			JSONException {
 		JSONObject obj = getDestinationLocation(cityName);
-		return fillCityObject(obj);
+		return fillCityObject(cityName,obj);
 
 	}
 
 	public static Municipality getMunicipality(String municipality)
 			throws IOException, JSONException {
 		JSONObject obj = getDestinationLocation(municipality);
-		return fillMunicipality(obj);
+		return fillMunicipality(municipality,obj);
 	}
 
 	private static JSONObject getDestinationLocation(String destination)
@@ -50,8 +50,9 @@ public class LocationReaderService {
 		return obj;
 	}
 
-	private static CityMacedonia fillCityObject(JSONObject obj) throws JSONException {
+	private static CityMacedonia fillCityObject(String cityName,JSONObject obj) throws JSONException {
 		CityMacedonia city = new CityMacedonia();
+		city.setCityName(cityName);
 		JSONObject res = obj.getJSONArray("results").getJSONObject(0);
 		JSONObject loc = res.getJSONObject("geometry")
 				.getJSONObject("location");
@@ -62,9 +63,10 @@ public class LocationReaderService {
 		return city;
 	}
 
-	private static Municipality fillMunicipality(JSONObject obj)
+	private static Municipality fillMunicipality(String municipalityName,JSONObject obj)
 			throws JSONException {
 		Municipality municipality = new Municipality();
+		municipality.setMunicipalityName(municipalityName);
 		JSONObject res = obj.getJSONArray("results").getJSONObject(0);
 		JSONObject loc = res.getJSONObject("geometry")
 				.getJSONObject("location");

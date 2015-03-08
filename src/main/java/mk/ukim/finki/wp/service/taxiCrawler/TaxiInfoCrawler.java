@@ -17,9 +17,10 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Configurable
-public class TaxiInfoCrawler {
+@Service
+public class TaxiInfoCrawler implements TaxiInfoCrawlerI{
 
 	private Document doc;
 	private String url = "http://zk.mk/";
@@ -53,9 +54,6 @@ public class TaxiInfoCrawler {
 
 		CityMacedonia city = LocationReaderService.getCityLocation(location);
 		
-		System.out.println("da");
-		cityRepo.findAll();
-		System.out.println("da");
 		CityMacedonia result  = cityRepo.findByLatitudeAndLongitude(city.getLatitude(), city.getLongitude());
 
 		if (result != null) {

@@ -11,6 +11,7 @@ import java.util.List;
 
 
 
+
 import mk.ukim.finki.wp.model.Taxi;
 
 import org.json.JSONException;
@@ -18,15 +19,19 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-@Configurable
-public class TaxiCrawlerService {
+@Service
+public class TaxiCrawlerService implements TaxiCrawlerI{
 	
-	private static String url = "http://zk.mk/search/?what=taksi+kompanii";
+	private String url = "http://zk.mk/search/?what=taksi+kompanii";
+	
+	@Autowired
+	TaxiInfoCrawlerI taxiInfo;
 
-	private static Elements pageElements(int skip) throws IOException {
+	private Elements pageElements(int skip) throws IOException {
 		String urlPath = url + "&skip=" + skip;
 		Document doc = Jsoup.connect(urlPath).get();
 		Elements taxiElements = doc.select("a.companyname");
@@ -34,7 +39,7 @@ public class TaxiCrawlerService {
 		return taxiElements;
 	}
 	
-	private static Elements getAllElements () {
+	private Elements getAllElements () {
 		int skip = 0;
 		Elements elementList = new Elements();
 		Elements pageElements;
@@ -53,10 +58,9 @@ public class TaxiCrawlerService {
 		return elementList;
 	}
 
-	public static ArrayList<Taxi> getAll() throws IOException, JSONException {
+	public ArrayList<Taxi> getAll() throws IOException, JSONException  {
 		Elements elements = getAllElements();
 		ArrayList<Taxi> taxiList = new ArrayList<Taxi>();
-		TaxiInfoCrawler taxiInfo = new TaxiInfoCrawler();
 		
 		for (Element element : elements) {
 			Taxi tempTaxi = taxiInfo.getTaxi(element.attr("href"));
