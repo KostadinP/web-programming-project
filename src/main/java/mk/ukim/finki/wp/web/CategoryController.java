@@ -54,7 +54,6 @@ public class CategoryController {
 	public Category create(@RequestParam String name) {
 		Category category = new Category();
 		category.setName(name);
-
 		return service.saveOrUpdate(category);
 	}
 

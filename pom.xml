@@ -83,6 +83,13 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+
+
+		<dependency>
 			<groupId>org.jadira.usertype</groupId>
 			<artifactId>usertype.core</artifactId>
 			<version>${jadira-usertype-core.version}</version>
@@ -573,7 +580,7 @@
 
 					<port>9966</port>
 					<path>/web-programming</path>
-					
+
 					<clientAuth>false</clientAuth>
 					<httpsPort>9443</httpsPort>
 					<httpPort>9966</httpPort>
