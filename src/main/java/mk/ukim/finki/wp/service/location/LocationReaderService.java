@@ -51,15 +51,23 @@ public class LocationReaderService {
 	}
 
 	private static CityMacedonia fillCityObject(String cityName,JSONObject obj) throws JSONException {
+		
 		CityMacedonia city = new CityMacedonia();
 		city.setCityName(cityName);
+		
 		JSONObject res = obj.getJSONArray("results").getJSONObject(0);
 		JSONObject loc = res.getJSONObject("geometry")
 				.getJSONObject("location");
-
+		
 		city.setLatitude(loc.getDouble("lat"));
 		city.setLongitude(loc.getDouble("lng"));
-
+		
+		try {
+			Thread.sleep(260);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return city;
 	}
 

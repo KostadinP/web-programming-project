@@ -64,6 +64,36 @@ public class Taxi extends BaseEntity{
 		this.taxiInfo = taxiInfo;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result;
+		result = prime 
+				+ ((taxiName == null) ? 0 : taxiName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (getClass() != obj.getClass())
+			return false;
+		Taxi other = (Taxi) obj;
+		if (taxiName == null) {
+			if (other.taxiName != null)
+				return false;
+		} else if (!taxiName.equals(other.taxiName))
+			return false;
+		return true;
+	}
+
+	
+
+
+
+
+		
 	
 	
 }

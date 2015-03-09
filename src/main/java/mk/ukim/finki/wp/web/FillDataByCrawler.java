@@ -2,14 +2,13 @@ package mk.ukim.finki.wp.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import mk.ukim.finki.wp.model.Taxi;
-import mk.ukim.finki.wp.repository.CityMacedoniaRepository;
-import mk.ukim.finki.wp.repository.TaxiRepository;
+import mk.ukim.finki.wp.service.CrudCityMacedoniaService;
 import mk.ukim.finki.wp.service.CrudTaxiService;
 import mk.ukim.finki.wp.service.taxiCrawler.TaxiCrawlerI;
-import mk.ukim.finki.wp.service.taxiCrawler.TaxiCrawlerService;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,8 @@ public class FillDataByCrawler {
 	CrudTaxiService taxiService;
 	@Autowired
 	TaxiCrawlerI taxiCrawler;
+	@Autowired
+	CrudCityMacedoniaService cityService;
 	
 	@RequestMapping(value = "taxi", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -33,12 +34,17 @@ public class FillDataByCrawler {
 		
 		ArrayList<Taxi> taxiList = taxiCrawler.getAll();
 		ArrayList<Taxi> newTaxies = new ArrayList<Taxi>();
+		HashSet<Integer> taxiSet = taxiService.findAllasHashSet();
+	
 		for (Taxi taxi : taxiList) {
-			if(taxiService.findByTaxiName(taxi.getTaxiName())==null){
+			
+			if(!taxiSet.contains(taxi.hashCode())){
 				taxiService.save(taxi);
+				taxiSet.add(taxi.hashCode());
 				newTaxies.add(taxi);
 			}
 		}
+
 		return newTaxies;
 	}
 }

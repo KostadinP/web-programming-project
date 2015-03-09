@@ -2,6 +2,8 @@ package mk.ukim.finki.wp.service.taxiCrawler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.StringTokenizer;
 
 import mk.ukim.finki.wp.model.CityMacedonia;
@@ -18,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TaxiInfoCrawler implements TaxiInfoCrawlerI{
+public class TaxiInfoCrawler implements TaxiInfoCrawlerI {
 
 	private Document doc;
 	private String url = "http://zk.mk/";
@@ -35,34 +37,33 @@ public class TaxiInfoCrawler implements TaxiInfoCrawlerI{
 		}
 	}
 
-	public Taxi getTaxi(String path) throws IOException, JSONException {
+	public Taxi getTaxi(String path, HashMap<Integer,CityMacedonia> hashMap)
+			throws IOException, JSONException {
 
 		init(path);
 		Taxi taxi = new Taxi();
 		taxi.setTaxiName(getTaxiName());
-		setTaxiLocation(taxi);
+		setTaxiLocation(taxi, hashMap);
 		taxi.setTaxiAddress(getTaxiAddress());
 		setTaxiPhones(taxi);
 
 		return taxi;
 	}
 
-	private void setTaxiLocation(Taxi taxi) throws IOException, JSONException {
+	private void setTaxiLocation(Taxi taxi, HashMap<Integer,CityMacedonia> cityMap) throws IOException, JSONException {
+		
 		String location = getTaxiLocation();
-
 		CityMacedonia city = LocationReaderService.getCityLocation(location);
 		
-		CityMacedonia result  = cityService.findByLatitudeAndLongitude(city.getLatitude(), city.getLongitude());
-
-		if (result != null) {
-			
-			taxi.setTaxiLocation(result);
-		} else {
-			System.out.println(city.getLatitude() + " "+ city.getLongitude());
-			cityService.saveAndFlush(city);
+		if(cityMap.containsKey(city.hashCode())){
+			taxi.setTaxiLocation(cityMap.get(city.hashCode()));
+		}
+		else{
+			cityService.save(city);
+			city = cityService.findByLatitudeAndLongitude(city.getLatitude(), city.getLongitude());
+			cityMap.put(city.hashCode(), city);
 			taxi.setTaxiLocation(city);
 		}
-
 	}
 
 	private String getTaxiName() {
@@ -107,7 +108,7 @@ public class TaxiInfoCrawler implements TaxiInfoCrawlerI{
 		Elements taxiElements = doc.select(".details li");
 		ArrayList<String> taxiPhones = new ArrayList<String>();
 		taxiPhones.add(getTaxiFirstPhone());
-		
+
 		for (Element element : taxiElements) {
 			if (checkForAnotherPhone(element)) {
 				String[] array = element.text().split(": ");
@@ -116,5 +117,7 @@ public class TaxiInfoCrawler implements TaxiInfoCrawlerI{
 		}
 		taxi.setTaxiPhones(taxiPhones);
 	}
+
+
 
 }

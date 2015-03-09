@@ -1,11 +1,14 @@
 package mk.ukim.finki.wp.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.HashSet;
+import java.util.List;
 
 import mk.ukim.finki.wp.model.Taxi;
 import mk.ukim.finki.wp.repository.TaxiRepository;
 import mk.ukim.finki.wp.service.CrudTaxiService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class CrudTaxiServiceImpl extends
@@ -23,6 +26,17 @@ public class CrudTaxiServiceImpl extends
 	@Override
 	public Taxi findByTaxiName(String taxiName) {
 		return repository.findByTaxiName(taxiName);
+	}
+
+	@Override
+	public HashSet<Integer> findAllasHashSet() {
+
+		List<Taxi>taxiList = repository.findAll();
+		HashSet<Integer> hashSet = new HashSet<Integer>();
+		for (Taxi taxi : taxiList) {
+			hashSet.add(taxi.hashCode());
+		}
+		return hashSet;
 	}
 
 }
