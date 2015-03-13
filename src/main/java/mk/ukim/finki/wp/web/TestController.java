@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.web;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,9 +8,11 @@ import mk.ukim.finki.wp.model.CityMacedonia;
 import mk.ukim.finki.wp.model.Location;
 import mk.ukim.finki.wp.model.Municipality;
 import mk.ukim.finki.wp.model.Taxi;
+import mk.ukim.finki.wp.model.TrainLine;
 import mk.ukim.finki.wp.service.CrudCityMacedoniaService;
 import mk.ukim.finki.wp.service.CrudMunicipalityService;
 import mk.ukim.finki.wp.service.CrudTaxiService;
+import mk.ukim.finki.wp.service.CrudTrainLineService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +32,22 @@ public class TestController {
 
 	@Autowired
 	private CrudMunicipalityService municipalityService;
+	
+	@Autowired
+	private CrudTrainLineService trainLineService;
+	
+	@SuppressWarnings("deprecation")
+	@RequestMapping(value = "addTrainLine", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public TrainLine createTrainLine() {
+		TrainLine tl = new TrainLine();
+		tl.setArrivalCity(cityService.findOne((long) 1));
+		tl.setDepartureCity(cityService.findOne((long) 2));
+		tl.setDepartureTime(new Time(10,5,0));
+		tl.setArrivalTime(new Time(12, 25, 0));
+
+		return trainLineService.save(tl);
+	}
 
 	@RequestMapping(value = "addTaxi", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
